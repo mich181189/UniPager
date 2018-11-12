@@ -1,5 +1,4 @@
-#![feature(alloc_system, mpsc_select, tcpstream_connect_timeout)]
-extern crate alloc_system;
+#![feature(mpsc_select, tcpstream_connect_timeout)]
 extern crate serial;
 extern crate raspi;
 extern crate ws;
@@ -23,6 +22,7 @@ mod transmitter;
 mod pocsag;
 mod frontend;
 
+use std::alloc::System;
 use std::thread;
 use std::time;
 use std::fs::File;
@@ -32,6 +32,9 @@ use config::Config;
 use connection::Connection;
 use frontend::{Request, Response};
 use pocsag::Scheduler;
+
+#[global_allocator]
+static A: System = System;
 
 fn print_version() {
     println!("UniPager {}", env!("CARGO_PKG_VERSION"));
